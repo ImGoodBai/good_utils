@@ -17,50 +17,56 @@ function hack(){
         image = document.getElementById("cover_lightbox").getElementsByTagName("img"); 
         image_src = image[0].getAttribute("src"); 
         image_alt = image[0].getAttribute("alt"); 
-	art_info = document.getElementById("album_intro").innerText;
+	art_elem = document.getElementById("album_intro");
+	art_info = "专辑介绍：暂空";	
+	if (art_elem){
+		art_info = art_elem.innerText;	
+		art_info = art_info.replace(new RegExp('\n','g'), '<br>');
+	}
+	//art_info = art_info.replace(/(\r\n|\n|\r)/gm,"<br>");
 	art_songcount = 0;
-	printtxt.push('---<br>layout: minge<br>keyword: 陕北民歌<br>tags: <br>title: ' + artist_name + '<br>---');
-	printtxt.push('<br>&#60script&#62');
-        printtxt.push('<div id ="" class = artist_info ><br>\
-        artist_t = {};<br>\
-        album_t = {};<br>\
-        disc_t = {};<br>\
-        song_t = {};<br>\
-        artist_t.id = "";<br>\
-        artist_t.name = "' + artist_name + '";<br>\
-        artist_t.image = ["' + image_src + '","' + image_alt + '"];<br>\
-	artist_t.des = \'' + art_info + '\';<br>\
-        artist_t.albumlist = [];<br></div>');
+	printtxt.push('---\nlayout: minge\nkeyword: 陕北民歌 \ntags: \ntitle: ' + artist_name + '\n---');
+	printtxt.push('\n<script>\n\
+        artist_t = {};\n\
+        album_t = {};\n\
+        disc_t = {};\n\
+        song_t = {};\n\
+        artist_t.id = "";\n\
+        artist_t.name = "' + artist_name + '";\n\
+        artist_t.image = ["' + image_src + '","' + image_alt + '"];\n\
+	artist_t.des = \'' + art_info + '\';\n\
+        artist_t.albumlist = [];\n');
 
         albums = document.getElementsByClassName("album_item100_block");
         //for(i=0;i<albums.length;i++){
         for(i=0;i<1;i++){
                 albumx = "album-" + i;
                 albumn =  document.getElementById("title").innerText;
-                printtxt.push('<br><br><br>\
-                album_t.id = "' + albumx + '";<br>\
-                album_t.name = "' + albumn + '"<br>\
+		albumn = albumn.replace(new RegExp('\n','g'), '<br>');
+                printtxt.push('\n\n\n\
+                album_t.id = "' + albumx + '";\n\
+                album_t.name = "' + albumn + '"\n\
                 album_t.disclist = [];');
 
                 tracks = document.getElementById("track").getElementsByClassName("trackname");
-                if (tracks.length == 0 ){console.log(artist_name + " track is NULL." + "<br>");continue};
+                if (tracks.length == 0 ){console.log(artist_name + " track is NULL." + "\n");continue};
                 track_count = tracks.length;
                 track_name = tracks[0].innerText;
 
                 discs = document.getElementById("track").getElementsByTagName("table");
-                if (discs.length == 0 ){console.log(artist_name + ">" + track_name +  " is NULL." + "<br>");continue;};
-                console.log(artist_name + ">" + track_name +  "count:" + discs.length + "<br>");
+                if (discs.length == 0 ){console.log(artist_name + ">" + track_name +  " is NULL." + "\n");continue;};
+                console.log(artist_name + ">" + track_name +  "count:" + discs.length + "\n");
                 //for every exsit disc
                 for(j=0;j<discs.length;j++){
                         discx = "disc-" + j;
-                        printtxt.push('<br><br>\
-                        disc_t.id = "' + discx + '"<br>\
+                        printtxt.push('\n\n\
+                        disc_t.id = "' + discx + '"\n\
                         disc_t.songlist = [];');
                         disc = discs[j];
                         trs = disc.getElementsByTagName("tr");
                         song_count = trs.length;
-                        if (trs.length == 0 ){console.log(artist_name + ">" + track_name + ">tables" + (j+1) +  " is NULL." + "<br>");continue;};
-                        console.log(artist_name + ">" + track_name + ">tables" + (j+1) +  " Song:" + song_count + "<br>");
+                        if (trs.length == 0 ){console.log(artist_name + ">" + track_name + ">tables" + (j+1) +  " is NULL." + "\n");continue;};
+                        console.log(artist_name + ">" + track_name + ">tables" + (j+1) +  " Song:" + song_count + "\n");
                         //one <tr> contain one song
                         for(h=0;h<trs.length;h++){
                                 tr = trs[h];
@@ -88,7 +94,7 @@ function hack(){
                                         lrc_str = orig_split[0];
 				}
 */
-				printtxt.push('<br>\
+				printtxt.push('\n\
 						song_t.name = "' + a1.innerText + '";\
                                 song_t.id = "' + tmp[index] + '";\
                                 song_t.lrc = "' + lrc_str + '";');
@@ -97,11 +103,11 @@ function hack(){
                                 printtxt.push('disc_t.songlist.push(song_t);\
 				song_t = new Object();');
                         }
-                        printtxt.push('<br>album_t.disclist.push(disc_t);disc_t = new Object();');
+                        printtxt.push('\nalbum_t.disclist.push(disc_t);disc_t = new Object();');
                 }
-                printtxt.push('<br>artist_t.albumlist.push(album_t);album_t = new Object();');
+                printtxt.push('\nartist_t.albumlist.push(album_t);album_t = new Object();');
         }
-	printtxt.push('<br>&#60/script&#62&#62');
+	printtxt.push('\n</script>');
 	outdata = "";
 	for(gg=0;gg<printtxt.length;gg++){
 		//out.document.write(printtxt[gg]);
@@ -137,9 +143,9 @@ function hack2(){
 	bb.append('Hello, world!');
 	saveAs(bb.getBlob('text/plain;charset=utf-8'), 'hello world.txt');
 }
-di = document.getElementById("title");
+di = document.getElementById("album_rank");
 var bu = document.createElement("button");
-bu.innerText= " hackddddddkkkkkkkkkk";
+bu.innerText= " Start Hack...";
 bu.setAttribute("id","hack");
 //bu.setAttribute("onclick","hack()");
 di.appendChild(bu);
